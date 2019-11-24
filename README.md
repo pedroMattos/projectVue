@@ -3,7 +3,7 @@
 #
 #
 #
-# Usuário do banco: dp_aula
+# Usuário do banco: bd_aula
 # Senha: root
 # Linguagem backend: php
 # Linguagem do banco: Mysql
@@ -19,7 +19,7 @@
 # *** incs >
 # scripts
 # functions
-# *** temps >
+# *** views >
 # views
 # *** assets >
 # **** css/sass >
