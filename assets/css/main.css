@@ -1,0 +1,41 @@
+nav {
+    position: relative;
+    height: 56px;
+    width: 100%;
+    background-color: grey;
+}
+nav ul li#menu {
+    position: absolute;
+    right: 0;
+    margin-right: 40px;
+    cursor: pointer;
+}
+nav ul li#brand {
+    position: absolute;
+    left: 0;
+    margin-left: 40px;
+    cursor: pointer;
+}
+#submenu {
+    height: 0;
+    display: list-item;
+    background-color: white;
+    overflow: hidden;
+    border: 1px solid transparent;
+    width: 100%;
+    transition-duration: .8s;
+    max-height: 80px;
+    max-width: 100px;
+    float: right;
+    border-radius: 5px;
+}
+#submenu li {
+    padding: 0 7px 5px 7px;
+    cursor: pointer;
+    transition-duration:  .8s;
+    position: relative;
+}
+#submenu li:hover {
+    color: purple;
+    transition-duration:  .8s;
+}
