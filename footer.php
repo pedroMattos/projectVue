@@ -1,5 +1,5 @@
 <footer>
-            <!-- <script src="https://unpkg.com/vue"></script> -->
+            <script src="https://unpkg.com/vue"></script>
             
             <!-- The core Firebase JS SDK is always required and must be listed first -->
             <!-- <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script> -->
@@ -11,7 +11,7 @@
             <!-- <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script> -->
             <!-- Main scripts -->
             <script src="assets/js/main.js"></script>
-            <?php include_once 'incs/vue-app.php'; ?>
+            <?php include_once 'vue-app.php'; ?>
         </footer>
     </body>
 </html>
