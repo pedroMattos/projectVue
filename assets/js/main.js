@@ -31,7 +31,7 @@ window.onload = function() {
         var trigger = document.getElementById('menu')
         var i = 0;
         trigger.onclick = function() {
-            sub.setAttribute('style', 'height:100%;border: 1px solid grey')
+            sub.setAttribute('style', 'height:100%;border: 1px solid grey; opacity:1')
             i++;
             if(i >= 2) {
                 sub.removeAttribute('style')
