@@ -2,7 +2,7 @@ nav {
     position: relative;
     height: 56px;
     width: 100%;
-    background-color: grey;
+    background-color: black;
 }
 nav ul li#menu {
     position: absolute;
@@ -52,4 +52,11 @@ nav ul li#brand {
     height: 100%;
     object-fit: cover;
     filter: brightness(50%);
+}
+.card .card-image .card-title {
+    background-color: #808080c7;
+}
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
+    color: #ff2f00;
+    font-weight: 700;
 }
