@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+    <head lang="pt-br">
+        <meta charset="UTF-8">
+        <title>Teste Vue</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="assets/css/materialize.min.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="assets/css/main.css"/>
+    </head>
+    <body>
+        <div id="app">
+            <!-- transferir dados entre componenetes não parentes -->
+            <simple-form></simple-form>
+
+            <br>
+
+            <simple-list></simple-list>
+
+            <div class="row center">
+                <h1>{{ titulo }}</h1>
+                <buttton @click.stop.prevent="getUsers()" class="btn">Clique</buttton>
+                <div class="collection">
+                    <a href="#!" v-for="item in users" class="collection-item">{{ item.name }}</a>
+                    <a v-if="response != '' " href="#!" class="collection-item">{{ response }}</a>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Templates -->
+        <template id="form">
+            <div class="card row">
+                <div class="col m12 center">
+                    <label for="nome">Seu nome:</label>
+                    <input v-model="nome" type="text" name="nome" class="form">
+                </div>
+                <div class="center">
+                    <button @click.stop.prevent="submit()" class="btn">Send</button>
+                </div>
+            </div>
+        </template>
+        <template id="list">
+            <ul class="collection">
+                <li v-for="item in pessoas" @click.stop.prevent="getUsers()" class="collection-item">{{ item.integrantes }}</li>
+            </ul>
+        </template>
+        <footer>
+            <!-- Vue -->
+            <script src="https://unpkg.com/vue"></script>
+            <!-- Vue-resource -->
+            <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>            
+            <!-- The core Firebase JS SDK is always required and must be listed first -->
+            <!-- <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script> -->
+    
+            <!-- TODO: Add SDKs for Firebase products that you want to use
+                https://firebase.google.com/docs/web/setup#available-libraries -->
+            <!-- <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script> -->
+            <!-- <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script> -->
+            <!-- <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script> -->
+            <!-- Main scripts -->
+            <!-- <script src="assets/js/main.js"></script> -->
+            <script>
+                
+                // exemplo de mixin
+                var getUser = {
+                    methods: {
+                        // exemplo de mixins
+                        getUsers() {
+                            // exemplo de recuperar dados json api
+                            var url = 'http://jsonplaceholder.typicode.com/users'
+                            this.$http.get(url).then(function(response) {
+                                this.users = response.body;
+                            }, 
+                            // Exibindo mensagens de erro
+                            function(error) {
+                                var errorLog = 'Erro na requisição: '+error.url+' Status: '+error.status+', '+error.statusText;
+                                this.response = errorLog
+                                console.log('Erro na requisição: '+error.url+' Status: '+error.status+', '+error.statusText)
+                            })
+                        }
+                    },
+                }
+                //templates components
+                Vue.component('simple-form', {
+                    template: '#form',
+                    // data em templates por obrigatoriedade é uma função que retorna o valor desejado
+                    data() {
+                        return {
+                            nome: '',
+                        }
+                    },
+                    methods: {
+                        submit() {
+                            eventBus.$emit('submit', this.nome);
+                        }
+                    }
+                })
+
+                Vue.component('simple-list', {
+                    template: '#list',
+                    // ciclo de vida em que todos os componentes ja foram criados
+                    created() {
+                        // this
+                        var context = this;
+                        //listenner
+                        eventBus.$on('submit', function(nome) {
+                            // Verifica se existe, se sim adiciona na lista
+                            if(nome) {
+                                context.pessoas.push({ integrantes: nome })
+                            }
+                        })
+                    },
+
+                // chamando um mixin
+                // mixins: [getUser],
+
+                    // Dados
+                    data() {
+                        return {
+                            pessoas: [
+                                { integrantes: 'Teste' },
+                            ]
+                        }
+                    },
+                })
+
+                // instancia para intermediar a transferencia de valores entre componentes
+                var eventBus = new Vue();
+                var app = new Vue({
+                    el: "#app",
+
+                    mixins: [getUser],
+
+                    data: {
+                        titulo: 'Titulo',
+                        users: [],
+                        response: '',
+                    },
+                    methods: {
+
+                    }
+                });
+            </script>
+        </footer>
+
+    </body>
+</html>

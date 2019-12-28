@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+    <head lang="pt-br">
+        <meta charset="UTF-8">
+        <title>Teste Vue</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="assets/css/materialize.min.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="assets/css/main.css"/>
+    </head>
+    <body>
+        <div id="app">
+            <!-- transferir dados entre componenetes não parentes -->
+            <!-- Usando o atributo ref -->
+            <div ref="names" class="row center">
+                <h1>{{ titulo }}</h1>
+                <div class="collection">
+                    <!-- Utilizando o atributo key (identificador unico de cada elemento) -->
+                    <!-- <a href="#!" v-for="(item, index) in users" :key="item.user" class="collection-item">{{ item.user }} 
+                        <p class="red-text" @click.stop.prevent="remove(index)">x</p> </a> -->
+                </div>
+                <!-- Links de rotas incorretos requer configuração do servidor -->
+                <p class="red-text">Link com rota errada</p>
+                <a href="/jogos">Jogos</a>
+                <a href="/filmes">Filmes</a>
+                <!-- LInks de rotas corretos -->
+                <br>
+                <p class="green-text">Rota correta</p>
+                <router-link :to="{ name: 'jogos' }">Jogos</router-link>
+                <router-link :to="{ name: 'filmes' }">Filmes</router-link>
+                <router-link :to="{ name: 'home' }">Home</router-link>
+                <!-- renderizador do conteudo -->
+                <router-view></router-view>
+            </div>
+            <br> <br>
+            <!-- Usando o atributo is para definir o que será exibido -->
+            <transition name="fade">
+                <!-- <h4 class="center" v-if="entertainment == ''">Selecione</h4> -->
+                <!-- <component :is="entertainment"></component> -->
+            </transition>
+            <!-- <div class="center">
+                <label>
+                    <input name="jogos" value="jogos" v-model="entertainment" type="radio" />
+                    <span>Jogos</span>
+                </label>
+                <label>
+                    <input name="filmes" value="filmes" v-model="entertainment" type="radio" />
+                    <span>Filmes</span>
+                </label>
+            </div> -->
+
+        </div>
+
+        <template id="jogos">
+            <ul class="center">
+                <h1 class="center">{{ titulo }}</h1>
+                <li v-for="item in jogos">{{ item.jogo }}</li>
+            </ul>
+        </template>
+        <template id="filmes">
+            <ul class="center">
+                <h1 class="center">{{ titulo }}</h1>
+                <li v-if="show == 'filmes'" v-for="item in filmes"><router-link :to="{ name: 'singleFilme', params: { name: item.slug } }">{{ item.filme }}</router-link></li>
+                <li v-if="show == 'jogos'" v-for="item in jogos"><router-link :to="{ name: 'singleJogo', params: { name: item.slug } }">{{ item.jogo }}</router-link></li>
+                <router-view></router-view>
+            </ul>
+        </template>
+        <template id="content">
+            <div>
+                <h1>Titulo aqui</h1>
+                <p>Descrição aqui</p>
+                <p>Esse é seu termo específico da sub-rota</p>
+                <p>Com ele você pode recuperar itens específicos baseados no seu slug</p>
+                <p class="green-text">{{ $route.params.name }}</p>
+            </div>
+        </template>
+        <footer>
+            <!-- Vue -->
+            <script src="https://unpkg.com/vue"></script>
+            <!-- Vue-resource -->
+            <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>   
+            <!-- Vue Router -->
+            <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+            <!-- The core Firebase JS SDK is always required and must be listed first -->
+            <!-- <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script> -->
+            
+    
+            <!-- TODO: Add SDKs for Firebase products that you want to use
+                https://firebase.google.com/docs/web/setup#available-libraries -->
+            <!-- <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script> -->
+            <!-- <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script> -->
+            <!-- <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script> -->
+            <!-- Main scripts -->
+            <!-- <script src="assets/js/main.js"></script> -->
+            <script>
+                // iniciando templates
+                var Filmes = Vue.component('filmes', {
+                    template: '#filmes',
+                    data() {
+                        return {
+                            filmes: [
+                                {filme: 'Matrix', slug: 'matrix'},
+                                {filme: 'Star Wars', slug: 'star-wars'},
+                                {filme: 'Interestelar', slug: 'interestelar'},
+                            ],
+                            titulo: 'Filmes',
+                            show: 'filmes',
+                        }
+                    },
+                })
+                var Jogos = Vue.component('jogos', {
+                    template: '#jogos',
+                    data() {
+                        return {
+                            jogos: [
+                                {jogo: 'The Elder Scrolls Online', slug: 'the-elder-sxcrolls-online'},
+                                {jogo: 'Rainbow Six Siege', slug: 'rainbow-six-siege'},
+                                {jogo: 'Mordhau', slug: 'mordhau'},
+                            ],
+                            titulo: 'Jogos',
+                            show: 'jogos',
+                        }
+                    },
+                })
+
+                var filmeContent = Vue.component('filme-conteudo', {
+                    template: '#content',
+                })
+                var jogoContent = Vue.component('jogo-conteudo', {
+                    template: '#content',
+                })
+
+                // Vue router init
+                var router = new VueRouter({
+                    // remove o hash da url
+                    // mode: 'history',
+                    // definindo rotas, nomes e caminhos
+                    routes: [
+                        // rota raiz
+                        {path: '/', name: 'home',},
+                        {path: '/filmes', name: 'filmes', component: Filmes,
+                        // subrotas (slug/single)
+                        children: [
+                            {path: ':name', name: 'singleFilme', component: filmeContent,},
+                        ]
+                        },
+                        {path: '/jogos', name: 'jogos', component: Jogos,
+                        // subrotas (slug/single)
+                        children: [
+                            {path: ':name', name: 'singleJogo', component: jogoContent,},
+                        ]
+                        },
+                    ],
+                });
+                //intancia do Vue
+                var app = new Vue({
+                    el: "#app",
+                    router,
+
+                    // variavel para setar o componente no "is"
+                    // acessar a tributo especial ref
+                    mounted() {
+                        console.log(this.$refs.names);
+                        console.log(this.$router)
+                    },
+
+                    data: {
+                        titulo: 'Vue Js',
+                        users: [
+                            {user: 'Pedro'},
+                            {user: 'Thor'},
+                            {user: 'Melzita'},
+                            ],
+                        entertainment: '',
+                    },
+                    methods: {
+                        remove(index) {
+                            this.users.splice(index, 1);
+                        }
+                    }
+                });
+            </script>
+        </footer>
+
+    </body>
+</html>
