@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+    <head lang="pt-br">
+        <meta charset="UTF-8">
+        <title>Exemplo SPA Vue</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="assets/css/materialize.min.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="incs/main.css"/>
+    </head>
+    <body>
+        <div id="app">
+            <nav-bar></nav-bar>
+            <router-view></router-view>
+        </div>
+
+
+
+
+        <!-- Components -->
+        <template id="nav-bar">
+            <nav class="transparent" >
+                <div class="nav-wrapper container">
+                    <router-link :to="{ name: 'home' }" class="brand-logo">Logo</router-link>
+                    <ul id="nav-mobile" class="right hide-on-med-and-down">
+                        <li><router-link :to="{ name: 'jogos' }">Jogos</router-link></li>
+                        <li><a>Filmes</a></li>
+                        <li><a>Contatos</a></li>
+                    </ul>
+                </div>
+            </nav class="transparent" >
+        </template>
+        <template id="banner-home">
+            <div id="home">
+                <img v-for="item in image" v-bind:src="item.url" v-bind:alt="item.alt">
+                <div class="container" id="titles">
+                    <h1>{{ title }}</h1>
+                    <p v-if="sub != ''">{{ sub }}</p>
+                    <button class="btn btn-cta"><router-link :to="{ name: 'jogos' }">{{ ctaText }}</router-link></button>
+                </div>
+            </div>
+        </template>
+        <template id="jogos-body">
+            <div id="main">
+                <banner-internal></banner-internal>
+                <div id="body">
+                    <div class="center row" id="titulo">
+                        <h2>{{ title }}</h2>
+                    </div>
+                    <card></card>
+                </div>
+            </div>
+        </template>
+        <template id="banner-internal-page">
+            <div id="main-div">
+                <div id="img-banner">
+                    <img v-for="item in image" v-bind:src="item.url" v-bind:alt="item.alt">
+                </div>
+                <div  id="titles">
+                    <h1>{{ title }}</h1>
+                </div >
+            </div>
+        </template>
+        <template id="cards">
+            <div class="container" id="main-cards">
+                <div class="row">
+                    <div v-for="item in card" :key="item.id" class="col s12 m3">
+                        <div class="card">
+                        <div class="card-image">
+                            <img v-bind:src="item.url_img">
+                            <span class="card-title">{{ item.title }}</span>
+                        </div>
+                        <div class="card-content">
+                            <p>{{ item.desc }}</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="#">This is a link</a>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <footer>
+            <!-- Vue -->
+            <script src="https://unpkg.com/vue"></script>
+            <!-- Vue-resource -->
+            <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>   
+            <!-- Vue Router -->
+            <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+            <!-- The core Firebase JS SDK is always required and must be listed first -->
+            <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+            
+    
+            <!-- TODO: Add SDKs for Firebase products that you want to use
+                https://firebase.google.com/docs/web/setup#available-libraries -->
+            <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script>
+            <script src="main.js"></script>
+            <!-- Main scripts -->
+            <!-- <script src="assets/js/main.js"></script> -->
+            <!-- Tempplates init -->
+            <script>
+                //intancia do Vue
+                var app = new Vue({
+                    el: "#app",
+                    router,
+                    data: {
+                        internalPage: '',
+                    },
+                });
+            </script>
+        </footer>
+    </body>
+</html>
